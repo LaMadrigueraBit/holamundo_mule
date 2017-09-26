@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
+    <http:listener-config name="HTTP_Example" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <flow name="HolaMundo">
+        <http:listener config-ref="HTTP_Example" path="/holaMundo" allowedMethods="GET" doc:name="HTTP"/>
+        <set-payload value="&lt;h1&gt;Hey! Soy Mundo, qu&#233; pasa!?&lt;/h1&gt;&lt;p&gt;&#191;C&#243;mo est&#225;s?&lt;/p&gt;" doc:name="Set Payload" encoding="UTF-8" mimeType="text/html"/>
+    </flow>
+</mule>
