@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+    <http:request-config name="HTTP_Request_Configuration" host="host" port="80" doc:name="HTTP Request Configuration"/>
+    <flow name="choice-y-bucles">
+        <http:listener config-ref="HTTP_Example" path="/componentes/basicos" allowedMethods="GET" doc:name="HTTP"/>
+        <set-variable variableName="variable1" value="#[1]" doc:name="Set variable"/>
+        <choice doc:name="Choice">
+            <when expression="#[flowVars.variable1 == 1]">
+                <logger message="variable1 es 1 " level="INFO" category="{Choice-ruta1-logger}" doc:name="Logger"/>
+                <expression-component doc:name="Expression"><![CDATA[flowVars.lista = new java.util.ArrayList();
+flowVars.lista.add(1);
+flowVars.lista.add(2);
+flowVars.lista.add(3);
+flowVars.lista.add(4);
+flowVars.lista.add(5);
+flowVars.lista.add(6);]]></expression-component>
+            </when>
+            <otherwise>
+                <logger message="variable1 no es 1, es #[flowVars.variable1]" level="INFO" category="{Choice-ruta2-logger}" doc:name="Logger"/>
+            </otherwise>
+        </choice>
+        <foreach collection="#[flowVars.lista]" doc:name="For Each">
+            <expression-filter expression="#[payload &lt;=4]" doc:name="Expression"/>
+            <logger message="#[flowVars.counter] - #[payload]" level="INFO" category="{For-each-logger}" doc:name="Logger"/>
+        </foreach>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <logger message="&#161;Se ha producido un error!  #[message.exception]" level="INFO" doc:name="Logger"/>
+        </catch-exception-strategy>
+    </flow>
+</mule>
